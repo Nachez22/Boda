@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmación de Asistencia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #faf7f2;
+      --parchment: #f0e9dc;
+      --gold: #b8965a;
+      --gold-light: #d4b07a;
+      --gold-dark: #8a6c3a;
+      --text: #2c2420;
+      --text-muted: #7a6a5e;
+      --border: #d9ccc0;
+      --success: #4a7c5a;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(184,150,90,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 50% 100%, rgba(184,150,90,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .ornament {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      color: var(--gold);
+      letter-spacing: 12px;
+      margin-bottom: 24px;
+      opacity: 0.7;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 10vw, 96px);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .hero-names em {
+      font-style: italic;
+      color: var(--gold-dark);
+    }
+
+    .ampersand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(40px, 7vw, 72px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+      margin: 4px 0;
+    }
+
+    .hero-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin: 28px 0 16px;
+      letter-spacing: 1px;
+    }
+
+    .divider-ornament {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 32px auto;
+      max-width: 280px;
+      color: var(--gold);
+      opacity: 0.6;
+    }
+
+    .divider-ornament::before,
+    .divider-ornament::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 40px;
+    }
+
+    .scroll-cta {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--gold);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 500;
+      transition: opacity 0.3s;
+    }
+
+    .scroll-cta:hover { opacity: 0.7; }
+
+    .scroll-cta .arrow {
+      width: 1px;
+      height: 40px;
+      background: var(--gold);
+      opacity: 0.5;
+      animation: scrollArrow 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollArrow {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50% { transform: scaleY(0.6); opacity: 0.2; }
+    }
+
+    /* ── FORM SECTION ── */
+    .form-section {
+      background: var(--white);
+      padding: 80px 24px;
+      position: relative;
+    }
+
+    .form-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: 0.4;
+    }
+
+    .form-container {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .section-title em {
+      font-style: italic;
+      color: var(--gold-dark);
+    }
+
+    .section-subtitle {
+      margin-top: 16px;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── FORM FIELDS ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-label {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .form-label span {
+      color: var(--gold);
+      margin-left: 2px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.25s, background 0.25s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .form-input::placeholder { color: var(--text-muted); opacity: 0.5; }
+    .form-textarea { resize: vertical; min-height: 100px; }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--gold);
+      background: var(--white);
+    }
+
+    .select-wrapper {
+      position: relative;
+    }
+
+    .select-wrapper::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8px;
+      height: 8px;
+      border-right: 1px solid var(--gold);
+      border-bottom: 1px solid var(--gold);
+      transform: translateY(-60%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    /* Asistencia radio buttons */
+    .radio-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .radio-option {
+      flex: 1;
+      position: relative;
+    }
+
+    .radio-option input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .radio-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 16px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-muted);
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .radio-option input:checked + .radio-label {
+      border-color: var(--gold);
+      background: var(--parchment);
+      color: var(--text);
+    }
+
+    .radio-dot {
+      width: 8px;
+      height: 8px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .radio-option input:checked + .radio-label .radio-dot::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+
+    /* Companions field - conditional */
+    #acompanantes-group {
+      display: none;
+      grid-column: 1 / -1;
+    }
+    #acompanantes-group.visible { display: flex; }
+
+    /* ── SUBMIT ── */
+    .form-actions {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 48px;
+      background: var(--text);
+      color: var(--cream);
+      border: none;
+      border-radius: 2px;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: var(--gold-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-submit:active { transform: translateY(0); }
+
+    .btn-submit svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0.7;
+    }
+
+    .form-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    /* ── SUCCESS ── */
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 24px;
+    }
+
+    .success-screen.visible { display: block; }
+
+    .success-icon {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      color: var(--gold);
+      margin-bottom: 24px;
+    }
+
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 300;
+      margin-bottom: 12px;
+    }
+
+    .success-title em { font-style: italic; color: var(--gold-dark); }
+
+    .success-msg {
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 24px;
+      text-align: center;
+      background: var(--cream);
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      font-weight: 300;
+      text-transform: uppercase;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full { grid-column: 1; }
+      #acompanantes-group { grid-column: 1; }
+    }
+
+    /* ── ANIMATION ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up:nth-child(1) { animation-delay: 0.1s; }
+    .fade-up:nth-child(2) { animation-delay: 0.2s; }
+    .fade-up:nth-child(3) { animation-delay: 0.3s; }
+    .fade-up:nth-child(4) { animation-delay: 0.45s; }
+    .fade-up:nth-child(5) { animation-delay: 0.6s; }
+    .fade-up:nth-child(6) { animation-delay: 0.75s; }
+
+    .error-msg {
+      font-size: 11px;
+      color: #b44;
+      letter-spacing: 0.5px;
+      margin-top: -4px;
+      display: none;
+    }
+
+    .form-group.has-error .form-input,
+    .form-group.has-error .form-select,
+    .form-group.has-error .form-textarea {
+      border-color: #b44;
+    }
+
+    .form-group.has-error .error-msg { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="ornament fade-up">✦ ✦ ✦</p>
+    <p class="hero-eyebrow fade-up">Os invitamos a celebrar</p>
+    <div class="fade-up">
+      <h1 class="hero-names"><em>Nombre</em></h1>
+      <span class="ampersand">&</span>
+      <h1 class="hero-names"><em>Nombre</em></h1>
+    </div>
+    <p class="hero-date fade-up">Sábado, 14 de junio de 2025 &nbsp;·&nbsp; Donostia</p>
+    <div class="divider-ornament fade-up">✦</div>
+    <p class="hero-subtitle fade-up">
+      Nos encantaría contar con vuestra presencia en este día tan especial.<br>
+      Por favor, confirma tu asistencia antes del <strong style="color:var(--gold-dark);font-weight:500">1 de mayo</strong>.
+    </p>
+    <a href="#confirmar" class="scroll-cta fade-up">
+      Confirmar asistencia
+      <span class="arrow"></span>
+    </a>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="form-section" id="confirmar">
+    <div class="form-container">
+      <div class="section-header">
+        <p class="section-label">Confirmación de asistencia</p>
+        <h2 class="section-title">¿Contamos<br><em>contigo?</em></h2>
+        <p class="section-subtitle">
+          Rellena el formulario con tus datos. Nos ayudarás mucho a organizar el día.
+        </p>
+      </div>
+
+      <!-- FORM -->
+      <form id="rsvp-form" novalidate>
+        <div class="form-grid">
+
+          <!-- Nombre -->
+          <div class="form-group">
+            <label class="form-label" for="nombre">Nombre completo <span>*</span></label>
+            <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellidos" autocomplete="name" required>
+            <span class="error-msg">Por favor, introduce tu nombre.</span>
+          </div>
+
+          <!-- Teléfono -->
+          <div class="form-group">
+            <label class="form-label" for="telefono">Teléfono <span>*</span></label>
+            <input class="form-input" type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" required>
+            <span class="error-msg">Por favor, introduce tu teléfono.</span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group full">
+            <label class="form-label" for="email">Correo electrónico <span>*</span></label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="tu@email.com" autocomplete="email" required>
+            <span class="error-msg">Por favor, introduce un email válido.</span>
+          </div>
+
+          <!-- Asistencia -->
+          <div class="form-group full">
+            <label class="form-label">¿Asistirás? <span>*</span></label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="asistencia" value="si" required onchange="toggleAcompanantes(this)">
+                <span class="radio-label"><span class="radio-dot"></span> Sí, asistiré</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="asistencia" value="no" onchange="toggleAcompanantes(this)">
+                <span class="radio-label"><span class="radio-dot"></span> Lo siento, no podré asistir</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Acompañantes (condicional) -->
+          <div class="form-group" id="acompanantes-group">
+            <label class="form-label" for="acompanantes">Número de acompañantes</label>
+            <div class="select-wrapper">
+              <select class="form-select" id="acompanantes" name="acompanantes">
+                <option value="0">Solo yo</option>
+                <option value="1">1 acompañante</option>
+                <option value="2">2 acompañantes</option>
+                <option value="3">3 acompañantes</option>
+                <option value="4">4 acompañantes</option>
+                <option value="5">5 o más</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Menú -->
+          <div class="form-group">
+            <label class="form-label" for="menu">Opción de menú</label>
+            <div class="select-wrapper">
+              <select class="form-select" id="menu" name="menu">
+                <option value="">Selecciona tu menú</option>
+                <option value="carne">Menú con carne</option>
+                <option value="pescado">Menú con pescado</option>
+                <option value="vegetariano">Menú vegetariano</option>
+                <option value="vegano">Menú vegano</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Alergias / comentarios -->
+          <div class="form-group full">
+            <label class="form-label" for="alergias">Alergias, intolerancias o comentarios</label>
+            <textarea class="form-textarea" id="alergias" name="alergias" placeholder="Cuéntanos si tienes alguna alergia o intolerancia alimentaria, o cualquier cosa que debamos saber..."></textarea>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">
+            Enviar confirmación
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <p class="form-note">Los datos serán tratados únicamente para la organización del evento.</p>
+        </div>
+      </form>
+
+      <!-- SUCCESS -->
+      <div class="success-screen" id="success-screen">
+        <div class="success-icon">✦</div>
+        <h3 class="success-title"><em>¡Gracias!</em></h3>
+        <p class="success-msg">
+          Tu confirmación ha sido recibida.<br>
+          Nos alegra mucho poder contar contigo en este día tan especial.<br><br>
+          Pronto recibirás más detalles por correo electrónico.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Con todo nuestro cariño &nbsp;·&nbsp; 2025</p>
+  </footer>
+
+  <script>
+    // Mostrar campo acompañantes solo si confirma asistencia
+    function toggleAcompanantes(radio) {
+      const group = document.getElementById('acompanantes-group');
+      group.classList.toggle('visible', radio.value === 'si');
+    }
+
+    // Validación y envío
+    document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      let valid = true;
+
+      // Limpiar errores previos
+      form.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
+
+      // Validar nombre
+      const nombre = form.nombre.value.trim();
+      if (!nombre) {
+        form.querySelector('#nombre').closest('.form-group').classList.add('has-error');
+        valid = false;
+      }
+
+      // Validar email
+      const email = form.email.value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        form.querySelector('#email').closest('.form-group').classList.add('has-error');
+        valid = false;
+      }
+
+      // Validar teléfono
+      const telefono = form.telefono.value.trim();
+      if (!telefono) {
+        form.querySelector('#telefono').closest('.form-group').classList.add('has-error');
+        valid = false;
+      }
+
+      // Validar asistencia
+      const asistencia = form.querySelector('input[name="asistencia"]:checked');
+      if (!asistencia) {
+        valid = false;
+        alert('Por favor, indica si asistirás.');
+      }
+
+      if (!valid) return;
+
+      // ── AQUÍ CONECTARÁS CON GOOGLE SHEETS ──
+      // Por ahora mostramos la pantalla de éxito
+      const btn = form.querySelector('.btn-submit');
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+
+      // Simular envío (reemplazar por fetch a tu Apps Script)
+      await new Promise(r => setTimeout(r, 1000));
+
+      form.style.display = 'none';
+      document.getElementById('success-screen').classList.add('visible');
+      window.scrollTo({ top: document.getElementById('confirmar').offsetTop - 20, behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>
