@@ -556,7 +556,7 @@
           </div>
 
           <!-- Asistencia -->
-          <div class="form-group full">
+          <div class="form-group full" id="asistencia-group">
             <label class="form-label">¿Asistirás? <span>*</span></label>
             <div class="radio-group">
               <label class="radio-option">
@@ -568,6 +568,7 @@
                 <span class="radio-label"><span class="radio-dot"></span> Lo siento, no podré asistir</span>
               </label>
             </div>
+            <span class="error-msg">Por favor, indica si asistirás.</span>
           </div>
 
           <!-- Acompañantes (condicional) -->
@@ -675,8 +676,8 @@
       // Validar asistencia
       const asistencia = form.querySelector('input[name="asistencia"]:checked');
       if (!asistencia) {
+        form.querySelector('#asistencia-group').classList.add('has-error');
         valid = false;
-        alert('Por favor, indica si asistirás.');
       }
 
       if (!valid) return;
