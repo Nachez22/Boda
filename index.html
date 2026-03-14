@@ -489,8 +489,16 @@
 
     .form-group.has-error .form-input,
     .form-group.has-error .form-select,
-    .form-group.has-error .form-textarea {
+    .form-group.has-error .form-textarea,
+    .form-group.has-error .select-wrapper .form-select,
+    .form-group.has-error .radio-group {
       border-color: #b44;
+    }
+
+    .form-group.has-error .radio-group {
+      border: 1px solid #b44;
+      border-radius: 2px;
+      padding: 4px;
     }
 
     .form-group.has-error .error-msg { display: block; }
