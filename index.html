@@ -587,8 +587,8 @@
           </div>
 
           <!-- Menú -->
-          <div class="form-group">
-            <label class="form-label" for="menu">Opción de menú</label>
+          <div class="form-group" id="menu-group">
+            <label class="form-label" for="menu">Opción de menú <span>*</span></label>
             <div class="select-wrapper">
               <select class="form-select" id="menu" name="menu">
                 <option value="">Selecciona tu menú</option>
@@ -598,6 +598,7 @@
                 <option value="vegano">Menú vegano</option>
               </select>
             </div>
+            <span class="error-msg">Por favor, selecciona una opción de menú.</span>
           </div>
 
           <!-- Alergias / comentarios -->
@@ -677,6 +678,13 @@
       const asistencia = form.querySelector('input[name="asistencia"]:checked');
       if (!asistencia) {
         form.querySelector('#asistencia-group').classList.add('has-error');
+        valid = false;
+      }
+
+      // Validar menú
+      const menu = form.menu.value;
+      if (!menu) {
+        form.querySelector('#menu-group').classList.add('has-error');
         valid = false;
       }
 
