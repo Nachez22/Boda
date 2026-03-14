@@ -681,14 +681,30 @@
 
       if (!valid) return;
 
-      // ── AQUÍ CONECTARÁS CON GOOGLE SHEETS ──
-      // Por ahora mostramos la pantalla de éxito
       const btn = form.querySelector('.btn-submit');
       btn.disabled = true;
       btn.textContent = 'Enviando...';
 
-      // Simular envío (reemplazar por fetch a tu Apps Script)
-      await new Promise(r => setTimeout(r, 1000));
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec';
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nombre:       form.nombre.value.trim(),
+            email:        form.email.value.trim(),
+            telefono:     form.telefono.value.trim(),
+            asistencia:   form.querySelector('input[name="asistencia"]:checked').value,
+            acompanantes: form.acompanantes.value,
+            menu:         form.menu.value,
+            alergias:     form.alergias.value.trim()
+          })
+        });
+      } catch(err) {
+        // Con mode: no-cors el fetch siempre lanza opaque response, lo ignoramos
+      }
 
       form.style.display = 'none';
       document.getElementById('success-screen').classList.add('visible');
