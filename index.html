@@ -159,16 +159,16 @@
       border-top: 1px solid var(--border);
     }
     .hero-invite {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: clamp(16px, 2.5vw, 22px);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 14px;
       color: var(--muted); margin-bottom: 20px;
-      line-height: 1.6;
+      line-height: 1.8;
     }
     .hero-date-block {
       display: flex; align-items: center; justify-content: center;
-      gap: 16px; flex-wrap: wrap;
-      font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+      gap: 10px; flex-wrap: nowrap; white-space: nowrap;
+      font-size: clamp(9px, 2.5vw, 11px); letter-spacing: 3px; text-transform: uppercase;
       color: var(--muted);
     }
     .hero-date-block .sep { color: var(--gold); opacity: 0.5; }
@@ -395,8 +395,6 @@
     <div class="hero-footer">
       <p class="hero-invite fade-up">os invitamos a celebrar con nosotros<br>el día más especial de nuestras vidas</p>
       <div class="hero-date-block fade-up">
-        <span>Sábado</span>
-        <span class="sep">·</span>
         <span class="big">5 de Septiembre de 2026</span>
         <span class="sep">·</span>
         <span>Donostia · San Sebastián</span>
