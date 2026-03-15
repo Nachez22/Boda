@@ -590,7 +590,7 @@
             <div class="radio-group">
               <label class="radio-option">
                 <input type="radio" name="asistencia" value="si" required onchange="toggleAcompanantes(this)">
-                <span class="radio-label"><span class="square-dot"></span> Sí, asistiré</span>
+                <span class="radio-label"><span class="radio-dot"></span> Sí, asistiré</span>
               </label>
               <label class="radio-option">
                 <input type="radio" name="asistencia" value="no" onchange="toggleAcompanantes(this)">
@@ -612,6 +612,12 @@
             </div>
           </div>
 
+          <!-- Nombre acompañante (condicional) -->
+          <div class="form-group full" id="nombre-acompanante-group" style="display:none">
+            <label class="form-label" for="nombre_acompanante">Nombre y apellidos del acompañante <span>*</span></label>
+            <input class="form-input" type="text" id="nombre_acompanante" name="nombre_acompanante" placeholder="Nombre y apellidos">
+            <span class="error-msg">Por favor, introduce el nombre del acompañante.</span>
+          </div>
 
           <!-- Alergias / comentarios -->
           <div class="form-group full">
@@ -654,7 +660,20 @@
     function toggleAcompanantes(radio) {
       const group = document.getElementById('acompanantes-group');
       group.classList.toggle('visible', radio.value === 'si');
+      if (radio.value !== 'si') {
+        document.getElementById('nombre-acompanante-group').style.display = 'none';
+        document.getElementById('nombre_acompanante').value = '';
+      }
     }
+
+    // Mostrar campo nombre acompañante si selecciona 1
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('acompanantes').addEventListener('change', function() {
+        const nombreGroup = document.getElementById('nombre-acompanante-group');
+        nombreGroup.style.display = this.value === '1' ? 'flex' : 'none';
+        if (this.value !== '1') document.getElementById('nombre_acompanante').value = '';
+      });
+    });
 
     // Validación y envío
     document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
@@ -693,10 +712,11 @@
         valid = false;
       }
 
-      // Validar menú
-      const menu = form.menu.value;
-      if (!menu) {
-        form.querySelector('#menu-group').classList.add('has-error');
+      // Validar nombre acompañante si aplica
+      const numAcomp = form.acompanantes ? form.acompanantes.value : '0';
+      const nombreAcomp = document.getElementById('nombre_acompanante').value.trim();
+      if (numAcomp === '1' && !nombreAcomp) {
+        document.getElementById('nombre-acompanante-group').classList.add('has-error');
         valid = false;
       }
 
@@ -719,7 +739,7 @@
             telefono:     form.telefono.value.trim(),
             asistencia:   form.querySelector('input[name="asistencia"]:checked').value,
             acompanantes: form.acompanantes.value,
-            menu:         form.menu.value,
+            nombre_acompanante: document.getElementById('nombre_acompanante').value.trim(),
             alergias:     form.alergias.value.trim()
           })
         });
