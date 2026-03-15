@@ -37,7 +37,7 @@
       color: #900000;
     }
     /* Countdown números — siempre blanco */
-    .countdown-number { color: rgba(255,220,200,0.85) !important; }
+    .countdown-number { color: #ffffff !important; }
     .countdown-unit   { color: rgba(255,220,200,0.85) !important; }
     .countdown-label  { color: rgba(255,220,200,0.85) !important; }
 
@@ -57,7 +57,7 @@
 
     /* Beth Ellen siempre en granate */
     [style*="Beth Ellen"], .hero-names, .hero-tagline,
-    .section-title, .countdown-number, .location-name,
+    .section-title, .location-name,
     .success-title, .success-icon, .iban-number {
       color: #8B1A1A !important;
     }
@@ -188,7 +188,7 @@
       color: rgba(255,220,200,0.85); margin-bottom: 28px;
     }
     .countdown-grid { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
-    .countdown-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .countdown-item { display: flex; flex-direction: column; align-items: center; gap: 16px; }
     .countdown-number {
       font-family: 'Beth Ellen', cursive;
       font-size: clamp(44px, 7vw, 72px); line-height: 1; 
@@ -423,8 +423,9 @@
       <div class="gold-divider"></div>
       <div class="preboda-card">
         <div class="preboda-text">
-          <p>La fiesta empieza un día antes. Os esperamos el viernes 4 de septiembre para brindar y disfrutar con buena música antes del gran día.</p>
-          <p>Una cena informal donde calentar motores… porque un día no es suficiente para celebrar tanto amor.</p>
+          <p>Empezamos a celebrar antes del gran día.</p>
+          <p>El viernes 4 de septiembre nos reunimos para brindar y ponernos al día.</p>
+          <p>Un encuentro informal para arrancar motores y compartir juntos la emoción de lo que está por venir ✨🍸</p>
           <div class="preboda-details">
             <div class="preboda-detail"><span class="preboda-detail-icon">✦</span><span class="preboda-detail-text"><strong>Viernes, 4 de Septiembre</strong></span></div>
             <div class="preboda-detail"><span class="preboda-detail-icon">✦</span><span class="preboda-detail-text"><strong>Ñam - Peine del Viento</strong><br>Donostia-San Sebastián</span></div>
@@ -572,7 +573,6 @@
       document.getElementById('cd-dias').textContent  = Math.floor(diff / 86400000);
       document.getElementById('cd-horas').textContent = Math.floor((diff % 86400000) / 3600000);
       document.getElementById('cd-min').textContent   = Math.floor((diff % 3600000) / 60000);
-      document.getElementById('cd-seg').textContent   = Math.floor((diff % 60000) / 1000);
     }
     updateCountdown(); setInterval(updateCountdown, 1000);
 
