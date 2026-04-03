@@ -171,7 +171,6 @@
     }
     .hero-photos-track {
       display: flex; flex-direction: row;
-      animation: scrollRight 22s linear infinite;
       will-change: transform;
       height: 100%;
     }
@@ -183,10 +182,7 @@
       flex-shrink: 0;
       filter: brightness(0.65);
     }
-    @keyframes scrollRight {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+
 
     /* Overlay */
     .hero-overlay {
@@ -314,7 +310,10 @@
     .regalo-text { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 28px; }
     .iban-box { background: var(--warm); border: 1px solid var(--border); border-radius: 2px; padding: 24px 28px; display: inline-block; max-width: 100%; }
     .iban-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-    .iban-number { font-family: 'Cormorant Garamond', serif; font-size: clamp(15px, 4vw, 20px); letter-spacing: 2px; color: var(--text); white-space: nowrap; }
+    .iban-number { font-family: 'Cormorant Garamond', serif; font-size: clamp(15px, 4vw, 20px); letter-spacing: 2px; color: var(--text) !important; white-space: nowrap; -webkit-text-fill-color: var(--text); }
+    .iban-number a, .iban-number * { color: var(--text) !important; -webkit-text-fill-color: var(--text); text-decoration: none !important; }
+    .iban-copy-btn { margin-top: 14px; background: none; border: 1px solid var(--border); border-radius: 2px; padding: 8px 20px; cursor: pointer; font-family: 'Jost', sans-serif; font-size: 10px; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; transition: all 0.2s; display: inline-block; }
+    .iban-copy-btn:hover { border-color: var(--gold); color: var(--gold); }
 
     /* RSVP */
     .rsvp-section { background: var(--parchment); padding: 80px 24px; border-top: 1px solid var(--border); }
@@ -434,11 +433,7 @@
     <!-- Foto con texto encima -->
     <div class="hero-stage">
       <div class="hero-photos">
-        <div class="hero-photos-track">
-          <img src="./Asseets/images/Portada/foto1.jpeg" alt="">
-          <img src="./Asseets/images/Portada/foto2.jpeg" alt="">
-          <img src="./Asseets/images/Portada/foto3.jpeg " alt="">
-          <img src="./Asseets/images/Portada/foto4.jpeg" alt="">
+        <div class="hero-photos-track" id="carousel-track">
           <img src="./Asseets/images/Portada/foto1.jpeg" alt="">
           <img src="./Asseets/images/Portada/foto2.jpeg" alt="">
           <img src="./Asseets/images/Portada/foto3.jpeg " alt="">
@@ -554,9 +549,8 @@
         <p class="regalo-text">Estamos deseando disfrutar de este día con todos vosotros. Si además queréis ayudarnos en esta nueva etapa, aquí tenéis nuestros datos:</p>
         <div class="iban-box">
           <div class="iban-label">Número de cuenta</div>
-          <div style="display:flex;align-items:center;gap:12px;justify-content:center">
-          <div class="iban-number">ES64 0030 3425 4800 0264 7271</div>
-<!--          </button onclick="copyIban()" id="iban-btn" style="background:none;border:1px solid var(--border);border-radius:2px;padding:6px 10px;cursor:pointer;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;transition:all 0.2s">Copiar</button> -->
+          <div class="iban-number" id="iban-number"><span x-apple-data-detectors="false">ES64 0030 3425 4800 0264 7271</span></div>
+          <button onclick="copyIban()" id="iban-btn" class="iban-copy-btn">Copiar número</button>
         </div>
       </div>
     </div>
@@ -628,7 +622,27 @@
   <footer><p>Con todo nuestro cariño</p></footer>
 
   <script>
-    // Countdown
+    // Carrusel infinito
+    (function() {
+      const track = document.getElementById('carousel-track');
+      if (!track) return;
+      // Clonar las imágenes originales para tener siempre material de sobra
+      const imgs = Array.from(track.children);
+      imgs.forEach(img => track.appendChild(img.cloneNode(true)));
+      imgs.forEach(img => track.appendChild(img.cloneNode(true)));
+
+      let x = 0;
+      const speed = 0.5; // px por frame — ajusta a tu gusto
+      function step() {
+        x -= speed;
+        // Cuando el desplazamiento supera la mitad del ancho total, reinicia sin salto
+        const halfWidth = track.scrollWidth / 2;
+        if (Math.abs(x) >= halfWidth) x += halfWidth;
+        track.style.transform = 'translateX(' + x + 'px)';
+        requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    })();
     function updateCountdown() {
       const diff = new Date('2026-09-05T12:00:00') - new Date();
       if (diff <= 0) return;
@@ -669,20 +683,34 @@
       });
     });
 
-    /*function copyIban() {
-      const iban = document.getElementById('iban-number').textContent;
-      navigator.clipboard.writeText(iban).then(function() {
-        const btn = document.getElementById('iban-btn');
+    function copyIban() {
+      const iban = 'ES64 0030 3425 4800 0264 7271';
+      const btn = document.getElementById('iban-btn');
+      function showCopied() {
         btn.textContent = '✓ Copiado';
         btn.style.color = 'var(--gold)';
         btn.style.borderColor = 'var(--gold)';
         setTimeout(function() {
-          btn.textContent = 'Copiar';
-          btn.style.color = 'var(--muted)';
-          btn.style.borderColor = 'var(--border)';
+          btn.textContent = 'Copiar número';
+          btn.style.color = '';
+          btn.style.borderColor = '';
         }, 2000);
-      });
-    }*/
+      }
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(iban).then(showCopied);
+      } else {
+        // Fallback para file:// o HTTP
+        const ta = document.createElement('textarea');
+        ta.value = iban;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showCopied();
+      }
+    }
+
 
     // Submit
     document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
