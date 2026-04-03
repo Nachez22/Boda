@@ -63,28 +63,40 @@
     }
 
 
-    .planning-layout {
+    /* Planning — pares imagen+texto */
+    .planning-pairs { display: flex; flex-direction: column; gap: 48px; }
+    .planning-pair {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
+      grid-template-columns: 160px 1fr;
+      gap: 28px;
       align-items: center;
-      text-align: left;
     }
-    .planning-imgs-col {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+    .planning-pair.reverse {
+      grid-template-columns: 1fr 160px;
     }
-    .planning-imgs-col img {
+    .planning-pair.reverse .planning-pair-img { order: 2; }
+    .planning-pair.reverse .planning-pair-text { order: 1; text-align: right; }
+    .planning-pair-img img {
       width: 100%;
-      max-height: 200px;
       border-radius: 4px;
       object-fit: cover;
-      object-position: center;
       box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      display: block;
     }
-    @media (max-width: 600px) {
-      .planning-layout { grid-template-columns: 1fr; }
+    .planning-pair-text .pair-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; font-style: italic;
+      color: var(--gold); margin-bottom: 4px; display: block;
+    }
+    .planning-pair-text .pair-event {
+      font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 4px;
+    }
+    .planning-pair-text .pair-place {
+      font-size: 12px; font-weight: 300; color: var(--muted); line-height: 1.5;
+    }
+    .planning-note {
+      text-align: center; font-size: 11px; color: var(--muted);
+      margin-top: 8px; font-weight: 300; letter-spacing: 0.5px;
     }
 
     /* NOMBRE ARRIBA */
@@ -466,20 +478,32 @@
       <p class="section-tag" style="text-align:center">El gran día</p>
       <h2 class="section-title" style="text-align:center">Planning</h2>
       <div class="gold-divider"></div>
-      <div class="planning-layout">
-        <div>
-          <div class="timeline">
-            <div class="timeline-item"><span class="timeline-time">12:00h</span><div class="timeline-line"></div><div class="timeline-content"><div class="timeline-event">Ceremonia</div><div class="timeline-place">Basílica Santa María del Coro · Donostia</div></div></div>
-            <div class="timeline-item"><span class="timeline-time">14:30h</span><div class="timeline-line"></div><div class="timeline-content"><div class="timeline-event">Celebración</div><div class="timeline-place">Finca Machoenia · Urrugne</div></div></div>
+      <div class="planning-pairs">
+
+        <!-- Ceremonia: imagen izquierda, texto derecha -->
+        <div class="planning-pair">
+          <div class="planning-pair-img">
+            <img src="./Asseets/images/info/ilustracion-iglesia.jpeg" alt="Santa María del Coro">
           </div>
-          <p style="font-size:12px;color:var(--muted);margin-top:24px;font-weight:300">✦ &nbsp; Los horarios son orientativos y pueden variar &nbsp; ✦</p>
+          <div class="planning-pair-text">
+            <span class="pair-time">12:00h</span>
+            <div class="pair-event">Ceremonia</div>
+            <div class="pair-place">Basílica Santa María del Coro · Donostia</div>
+          </div>
         </div>
-        <div class="planning-imgs-col">
-          <img src="./Asseets/images/info/ilustracion-iglesia.jpeg" alt="Santa María del Coro">
-          <img src="./Asseets/images/info/ilustracion-machoenia.jpeg" alt="Machoenia">
+
+        <!-- Celebración: texto izquierda, imagen derecha -->
+        <div class="planning-pair reverse">
+          <div class="planning-pair-text">
+            <span class="pair-time">14:30h</span>
+            <div class="pair-event">Celebración</div>
+            <div class="pair-place">Finca Machoenia · Urrugne</div>
+          </div>
+          <div class="planning-pair-img">
+            <img src="./Asseets/images/info/ilustracion-machoenia.jpeg" alt="Machoenia">
+          </div>
         </div>
-      </div>
-    </div>
+
   </section>
 
   <!-- CÓMO LLEGAR -->
