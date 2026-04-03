@@ -556,7 +556,7 @@
           <div class="iban-label">Número de cuenta</div>
           <div style="display:flex;align-items:center;gap:12px;justify-content:center">
           <div class="iban-number">ES64 0030 3425 4800 0264 7271</div>
-          <button onclick="copyIban()" id="iban-btn" style="background:none;border:1px solid var(--border);border-radius:2px;padding:6px 10px;cursor:pointer;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;transition:all 0.2s">Copiar</button>
+<!--          </button onclick="copyIban()" id="iban-btn" style="background:none;border:1px solid var(--border);border-radius:2px;padding:6px 10px;cursor:pointer;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;transition:all 0.2s">Copiar</button> -->
         </div>
       </div>
     </div>
@@ -669,7 +669,7 @@
       });
     });
 
-    function copyIban() {
+    /*function copyIban() {
       const iban = document.getElementById('iban-number').textContent;
       navigator.clipboard.writeText(iban).then(function() {
         const btn = document.getElementById('iban-btn');
@@ -682,7 +682,7 @@
           btn.style.borderColor = 'var(--border)';
         }, 2000);
       });
-    }
+    }*/
 
     // Submit
     document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
