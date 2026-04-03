@@ -560,8 +560,8 @@
             <span class="error-msg">Por favor, indica si asistirás.</span>
           </div>
           <div class="form-group" id="acompanantes-group">
-            <label class="form-label" for="acompanantes">Número de acompañantes</label>
-            <div class="select-wrapper"><select class="form-select" id="acompanantes" name="acompanantes"><option value="0">Solo yo</option><option value="1">1 acompañante</option></select></div>
+            <label class="form-label" for="acompanantes">¿Traerás acompañante?</label>
+            <div class="select-wrapper"><select class="form-select" id="acompanantes" name="acompanantes"><option value="0">Sí</option><option value="1">No</option></select></div>
           </div>
           <div class="form-group full" id="nombre-acompanante-group">
             <label class="form-label" for="nombre_acompanante">Nombre y apellidos del acompañante <span>*</span></label>
@@ -572,10 +572,19 @@
           <div class="form-group full" id="autobus-group">
             <label class="form-label">¿Necesitarás servicio de autobús? <span>*</span></label>
             <div class="radio-group">
-              <label class="radio-option"><input type="radio" name="autobus" value="si"><span class="radio-label"><span class="radio-dot"></span> Sí, lo necesito</span></label>
-              <label class="radio-option"><input type="radio" name="autobus" value="no"><span class="radio-label"><span class="radio-dot"></span> No, gracias</span></label>
+              <label class="radio-option"><input type="radio" name="autobus_yn" value="si" onchange="toggleTurno(this)"><span class="radio-label"><span class="radio-dot"></span> Sí, lo necesito</span></label>
+              <label class="radio-option"><input type="radio" name="autobus_yn" value="no" onchange="toggleTurno(this)"><span class="radio-label"><span class="radio-dot"></span> No, gracias</span></label>
             </div>
             <span class="error-msg">Por favor, indica si necesitarás el autobús.</span>
+          </div>
+          <div class="form-group full" id="turno-group" style="display:none">
+            <label class="form-label">¿Qué turno? <span>*</span></label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="autobus_turno" value="Turno 1 — 22:00h"><span class="radio-label"><span class="radio-dot"></span> Turno 1 &nbsp;·&nbsp; 22:00h</span></label>
+              <label class="radio-option"><input type="radio" name="autobus_turno" value="Turno 2 — 00:30h"><span class="radio-label"><span class="radio-dot"></span> Turno 2 &nbsp;·&nbsp; 00:30h</span></label>
+            </div>
+            <p style="font-size:11px;color:var(--muted);margin-top:8px;font-weight:300">* Horarios orientativos, por confirmar.</p>
+            <span class="error-msg" id="turno-error">Por favor, elige un turno.</span>
           </div>
         </div>
         <div class="form-actions">
@@ -613,6 +622,19 @@
     const ics = ['BEGIN:VCALENDAR','VERSION:2.0','BEGIN:VEVENT','DTSTART:20260905T120000','DTEND:20260905T235900','SUMMARY:Boda Cris & Iñigo','LOCATION:Santa María del Coro, Donostia','END:VEVENT','END:VCALENDAR'].join('\n');
     document.getElementById('cal-ical').href = URL.createObjectURL(new Blob([ics], {type:'text/calendar'}));
 
+    // Autobús turno
+    function toggleTurno(radio) {
+      const turnoGroup = document.getElementById('turno-group');
+      turnoGroup.style.display = radio.value === 'si' ? 'flex' : 'none';
+      turnoGroup.style.flexDirection = 'column';
+      if (radio.value !== 'si') {
+        const checked = document.querySelector('input[name="autobus_turno"]:checked');
+        if (checked) checked.checked = false;
+        document.getElementById('turno-error').style.display = 'none';
+        turnoGroup.classList.remove('has-error');
+      }
+    }
+
     // Acompañantes
     function toggleAcompanantes(radio) {
       document.getElementById('acompanantes-group').classList.toggle('visible', radio.value === 'si');
@@ -635,10 +657,17 @@
       if (!form.querySelector('input[name="asistencia"]:checked')) { form.querySelector('#asistencia-group').classList.add('has-error'); valid=false; }
       if (form.acompanantes.value==='1' && !document.getElementById('nombre_acompanante').value.trim()) { document.getElementById('nombre-acompanante-group').classList.add('has-error'); valid=false; }
       const asistenciaVal = form.querySelector('input[name="asistencia"]:checked');
-      if (asistenciaVal && asistenciaVal.value === 'si' && !form.querySelector('input[name="autobus"]:checked')) { document.getElementById('autobus-group').classList.add('has-error'); valid=false; }
+      if (asistenciaVal && asistenciaVal.value === 'si' && !form.querySelector('input[name="autobus_yn"]:checked')) { document.getElementById('autobus-group').classList.add('has-error'); valid=false; }
+      const autobusYN = form.querySelector('input[name="autobus_yn"]:checked');
+      if (autobusYN && autobusYN.value === 'si' && !form.querySelector('input[name="autobus_turno"]:checked')) {
+        document.getElementById('turno-group').classList.add('has-error');
+        document.getElementById('turno-error').style.display = 'block';
+        valid=false;
+      }
       if (!valid) return;
       const btn = form.querySelector('.btn-submit'); btn.disabled=true; btn.textContent='Enviando...';
-      try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:form.nombre.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),autobus:form.querySelector('input[name="autobus"]:checked')?.value||'',alergias:form.alergias.value.trim()})})} catch(err) {}
+      const autobusVal = autobusYN ? (autobusYN.value === 'si' ? (form.querySelector('input[name="autobus_turno"]:checked')?.value || 'si') : 'no') : '';
+      try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:form.nombre.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),autobus:autobusVal,alergias:form.alergias.value.trim()})})} catch(err) {}
       form.style.display='none';
       document.getElementById('success-screen').classList.add('visible');
       window.scrollTo({top:document.getElementById('confirmar').offsetTop-20,behavior:'smooth'});
