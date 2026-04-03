@@ -565,7 +565,7 @@
   <!-- RSVP -->
   <section class="rsvp-section" id="confirmar">
     <div class="form-container">
-      <div class="section-header">
+      <div class="section-header" id="rsvp-header">
         <p class="section-tag">Confirmación de asistencia</p>
         <h2 class="section-title">Nos encantaria celebrarlo contigo</h2>
         <p class="section-subtitle">Rellena el formulario por favor. Nos ayudarás mucho a organizar el día.</p>
@@ -707,6 +707,7 @@
       const fecha = new Date().toLocaleString('es-ES', {timeZone:'Europe/Madrid'});
       try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({fecha:fecha,nombre:form.nombre.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),autobus:autobusYNVal,autobus_turno:autobusTurnoVal,alergias:form.alergias.value.trim()})})} catch(err) {}
       form.style.display='none';
+      document.getElementById('rsvp-header').style.display='none';
       document.getElementById('success-screen').classList.add('visible');
       window.scrollTo({top:document.getElementById('confirmar').offsetTop-20,behavior:'smooth'});
     });
