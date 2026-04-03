@@ -414,6 +414,7 @@
     <a href="#autobus">Autobús</a>
     <a href="#regalo">Regalo</a>
     <a href="#confirmar">RSVP</a>
+
   </nav>
 
   <!-- HERO -->
@@ -458,28 +459,6 @@
       <div class="countdown-item"><span class="countdown-number" id="cd-dias">--</span><span class="countdown-unit">Días</span></div>
       <div class="countdown-item"><span class="countdown-number" id="cd-horas">--</span><span class="countdown-unit">Horas</span></div>
       <div class="countdown-item"><span class="countdown-number" id="cd-min">--</span><span class="countdown-unit">Minutos</span></div>
-    </div>
-  </section>
-
-  <!-- PREBODA -->
-  <section class="section" id="preboda">
-    <div class="section-inner">
-      <p class="section-tag" style="text-align:center">La noche antes</p>
-      <h2 class="section-title" style="text-align:center">Preboda</h2>
-      <div class="gold-divider"></div>
-      <div class="preboda-card">
-        <div class="preboda-text">
-          <p>Empezamos a celebrar antes del gran día.</p>
-          <p>El viernes 4 de septiembre nos reunimos para brindar y ponernos al día.</p>
-          <p>Un encuentro informal para arrancar motores y compartir juntos la emoción de lo que está por venir ✨🍸</p>
-          <div class="preboda-details">
-            <div class="preboda-detail"><span class="preboda-detail-icon">✦</span><span class="preboda-detail-text"><strong>Viernes, 4 de Septiembre</strong></span></div>
-            <div class="preboda-detail"><span class="preboda-detail-icon">✦</span><span class="preboda-detail-text"><strong>Ñam - Peine del Viento</strong></span></div>
-            <div class="preboda-detail"><span class="preboda-detail-icon">✦</span><span class="preboda-detail-text"><strong>⏰ 20:00h</strong> — Por confirmar</span></div>
-          </div>
-        </div>
-        <img src="Asseets/images/info/ilustracion-peine-del-viento.jpeg" alt="Ñam - Peine del Viento" class="section-img" style="margin-bottom:16px">
-      </div>
     </div>
   </section>
 
@@ -571,9 +550,7 @@
       </div>
       <form id="rsvp-form" novalidate>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label" for="nombre">Nombre completo <span>*</span></label><input class="form-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellidos" autocomplete="name" required><span class="error-msg">Por favor, introduce tu nombre.</span></div>
-          <div class="form-group"><label class="form-label" for="telefono">Teléfono <span>*</span></label><input class="form-input" type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" autocomplete="tel" required><span class="error-msg">Por favor, introduce tu teléfono.</span></div>
-          <div class="form-group full"><label class="form-label" for="email">Correo electrónico <span>*</span></label><input class="form-input" type="email" id="email" name="email" placeholder="tu@email.com" autocomplete="email" required><span class="error-msg">Por favor, introduce un email válido.</span></div>
+          <div class="form-group full"><label class="form-label" for="nombre">Nombre completo <span>*</span></label><input class="form-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre y apellidos" autocomplete="name" required><span class="error-msg">Por favor, introduce tu nombre.</span></div>
           <div class="form-group full" id="asistencia-group">
             <label class="form-label">¿Asistirás? <span>*</span></label>
             <div class="radio-group">
@@ -592,6 +569,14 @@
             <span class="error-msg">Por favor, introduce el nombre del acompañante.</span>
           </div>
           <div class="form-group full"><label class="form-label" for="alergias">Alergias, intolerancias o comentarios</label><textarea class="form-textarea" id="alergias" name="alergias" placeholder="Cuéntanos si tienes alguna alergia o intolerancia alimentaria, o cualquier cosa que debamos saber..."></textarea></div>
+          <div class="form-group full" id="autobus-group">
+            <label class="form-label">¿Necesitarás servicio de autobús? <span>*</span></label>
+            <div class="radio-group">
+              <label class="radio-option"><input type="radio" name="autobus" value="si"><span class="radio-label"><span class="radio-dot"></span> Sí, lo necesito</span></label>
+              <label class="radio-option"><input type="radio" name="autobus" value="no"><span class="radio-label"><span class="radio-dot"></span> No, gracias</span></label>
+            </div>
+            <span class="error-msg">Por favor, indica si necesitarás el autobús.</span>
+          </div>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn-submit">Enviar confirmación<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -647,13 +632,13 @@
       const form = e.target; let valid = true;
       form.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
       if (!form.nombre.value.trim()) { form.querySelector('#nombre').closest('.form-group').classList.add('has-error'); valid=false; }
-      if (!form.email.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.value.trim())) { form.querySelector('#email').closest('.form-group').classList.add('has-error'); valid=false; }
-      if (!form.telefono.value.trim()) { form.querySelector('#telefono').closest('.form-group').classList.add('has-error'); valid=false; }
       if (!form.querySelector('input[name="asistencia"]:checked')) { form.querySelector('#asistencia-group').classList.add('has-error'); valid=false; }
       if (form.acompanantes.value==='1' && !document.getElementById('nombre_acompanante').value.trim()) { document.getElementById('nombre-acompanante-group').classList.add('has-error'); valid=false; }
+      const asistenciaVal = form.querySelector('input[name="asistencia"]:checked');
+      if (asistenciaVal && asistenciaVal.value === 'si' && !form.querySelector('input[name="autobus"]:checked')) { document.getElementById('autobus-group').classList.add('has-error'); valid=false; }
       if (!valid) return;
       const btn = form.querySelector('.btn-submit'); btn.disabled=true; btn.textContent='Enviando...';
-      try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:form.nombre.value.trim(),email:form.email.value.trim(),telefono:form.telefono.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),alergias:form.alergias.value.trim()})})} catch(err) {}
+      try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:form.nombre.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),autobus:form.querySelector('input[name="autobus"]:checked')?.value||'',alergias:form.alergias.value.trim()})})} catch(err) {}
       form.style.display='none';
       document.getElementById('success-screen').classList.add('visible');
       window.scrollTo({top:document.getElementById('confirmar').offsetTop-20,behavior:'smooth'});
