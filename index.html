@@ -312,9 +312,9 @@
     /* REGALO */
     .regalo-card { text-align: center; max-width: 480px; margin: 0 auto; }
     .regalo-text { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 28px; }
-    .iban-box { background: var(--warm); border: 1px solid var(--border); border-radius: 2px; padding: 24px 36px; display: inline-block; }
+    .iban-box { background: var(--warm); border: 1px solid var(--border); border-radius: 2px; padding: 24px 28px; display: inline-block; max-width: 100%; }
     .iban-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
-    .iban-number { font-family: 'Cormorant Garamond', serif; font-size: 20px; letter-spacing: 2px; color: var(--text); }
+    .iban-number { font-family: 'Cormorant Garamond', serif; font-size: clamp(15px, 4vw, 20px); letter-spacing: 2px; color: var(--text); white-space: nowrap; }
 
     /* RSVP */
     .rsvp-section { background: var(--parchment); padding: 80px 24px; border-top: 1px solid var(--border); }
@@ -702,8 +702,10 @@
       }
       if (!valid) return;
       const btn = form.querySelector('.btn-submit'); btn.disabled=true; btn.textContent='Enviando...';
-      const autobusVal = autobusYN ? (autobusYN.value === 'si' ? (form.querySelector('input[name="autobus_turno"]:checked')?.value || 'si') : 'no') : '';
-      try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:form.nombre.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),autobus:autobusVal,alergias:form.alergias.value.trim()})})} catch(err) {}
+      const autobusYNVal = autobusYN ? autobusYN.value : '';
+      const autobusTurnoVal = (autobusYN && autobusYN.value === 'si') ? (form.querySelector('input[name="autobus_turno"]:checked')?.value || '') : '';
+      const fecha = new Date().toLocaleString('es-ES', {timeZone:'Europe/Madrid'});
+      try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({fecha:fecha,nombre:form.nombre.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),autobus:autobusYNVal,autobus_turno:autobusTurnoVal,alergias:form.alergias.value.trim()})})} catch(err) {}
       form.style.display='none';
       document.getElementById('success-screen').classList.add('visible');
       window.scrollTo({top:document.getElementById('confirmar').offsetTop-20,behavior:'smooth'});
