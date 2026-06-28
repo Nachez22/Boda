@@ -366,6 +366,13 @@
       cursor: pointer; transition: background 0.25s, transform 0.2s;
     }
     .btn-submit:hover { background: #6B0000; color: #fff; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-error-banner {
+      display: none; margin-top: 16px; padding: 14px 20px;
+      background: #fff0f0; border: 1px solid #e8b4b4; border-radius: 2px;
+      font-size: 13px; color: #8B1A1A; text-align: center; line-height: 1.6;
+    }
+    .form-error-banner.visible { display: block; }
     .btn-submit svg { width: 14px; height: 14px; opacity: 0.7; }
     .form-actions { margin-top: 40px; text-align: center; }
     .form-note { margin-top: 20px; font-size: 12px; color: var(--muted); font-weight: 300; }
@@ -605,6 +612,9 @@
         </div>
         <div class="form-actions">
           <button type="submit" class="btn-submit">Enviar confirmación<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <div class="form-error-banner" id="form-error-banner">
+            Ha ocurrido un error al enviar tu confirmación. Por favor, inténtalo de nuevo. Si el problema persiste, contacta directamente con nosotros.
+          </div>
         </div>
       </form>
       <div class="success-screen" id="success-screen">
@@ -712,10 +722,30 @@
     }
 
 
-    // Submit
+    // Submit — con reintentos y error visible
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwOWIHA5e4wCmHN2NA2p4CLDNWAWlVMYxhZ1ZIXWt-dZqmiL_edk_U1KjJSQ/exec';
+
+    async function enviarDatos(payload, intentos) {
+      for (var i = 0; i < intentos; i++) {
+        try {
+          await fetch(SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          return true;
+        } catch (err) {
+          if (i < intentos - 1) await new Promise(function(r) { setTimeout(r, 1500); });
+        }
+      }
+      return false;
+    }
+
     document.getElementById('rsvp-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const form = e.target; let valid = true;
+      var errorBanner = document.getElementById('form-error-banner');
+      errorBanner.classList.remove('visible');
       form.querySelectorAll('.form-group').forEach(g => g.classList.remove('has-error'));
       if (!form.nombre.value.trim()) { form.querySelector('#nombre').closest('.form-group').classList.add('has-error'); valid=false; }
       if (!form.querySelector('input[name="asistencia"]:checked')) { form.querySelector('#asistencia-group').classList.add('has-error'); valid=false; }
@@ -733,11 +763,28 @@
       const autobusYNVal = autobusYN ? autobusYN.value : '';
       const autobusTurnoVal = (autobusYN && autobusYN.value === 'si') ? (form.querySelector('input[name="autobus_turno"]:checked')?.value || '') : '';
       const fecha = new Date().toLocaleString('es-ES', {timeZone:'Europe/Madrid'});
-      try { await fetch('https://script.google.com/macros/s/AKfycbwmIIUVOTP2NYWWuIAMsFsqG6bdwaJ1czTdVout9ravYbcnoH8OK12mqUHnafEFBhGtNw/exec', {method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({fecha:fecha,nombre:form.nombre.value.trim(),asistencia:form.querySelector('input[name="asistencia"]:checked').value,acompanantes:form.acompanantes.value,nombre_acompanante:document.getElementById('nombre_acompanante').value.trim(),autobus:autobusYNVal,autobus_turno:autobusTurnoVal,alergias:form.alergias.value.trim()})})} catch(err) {}
-      form.style.display='none';
-      document.getElementById('rsvp-header').style.display='none';
-      document.getElementById('success-screen').classList.add('visible');
-      window.scrollTo({top:document.getElementById('confirmar').offsetTop-20,behavior:'smooth'});
+
+      var ok = await enviarDatos({
+        fecha: fecha,
+        nombre: form.nombre.value.trim(),
+        asistencia: form.querySelector('input[name="asistencia"]:checked').value,
+        acompanantes: form.acompanantes.value,
+        nombre_acompanante: document.getElementById('nombre_acompanante').value.trim(),
+        autobus: autobusYNVal,
+        autobus_turno: autobusTurnoVal,
+        alergias: form.alergias.value.trim()
+      }, 3);
+
+      if (ok) {
+        form.style.display='none';
+        document.getElementById('rsvp-header').style.display='none';
+        document.getElementById('success-screen').classList.add('visible');
+        window.scrollTo({top:document.getElementById('confirmar').offsetTop-20,behavior:'smooth'});
+      } else {
+        btn.disabled = false;
+        btn.innerHTML = 'Enviar confirmación<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        errorBanner.classList.add('visible');
+      }
     });
     
   </script>
